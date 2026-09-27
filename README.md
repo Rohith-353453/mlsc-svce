@@ -18,7 +18,7 @@ We provide data across 5 domains:
 1. Read the [Getting Started Guide](docs/getting-started.md).
 2. Explore the [Data Dictionary](docs/data-dictionary.md).
 3. Check out the [Issues Index](tasks/issues.md) or the repository's GitHub Issues tab to find a challenge.
-4. Build a solution using any language, framework, or tools you prefer.
+4. Build a solution using any language, framework, or tools you prefer. We highly encourage using GitHub Copilot to help build your application!
 5. Follow our [Contributing Guide](CONTRIBUTING.md) to submit a Pull Request.
 
 ## For Organizers
