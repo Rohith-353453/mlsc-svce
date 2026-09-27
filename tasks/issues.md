@@ -1,4 +1,4 @@
-# DevDash Challenges Index
+# Dev Days Challenges Index
 
 Here are the challenges you can take on. Pick one, write some code, and submit a PR!
 

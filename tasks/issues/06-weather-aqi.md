@@ -16,4 +16,4 @@ Compare environmental readings across different cities and dates.
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 06-weather-aqi -->
+<!-- DEV_DAYS_ISSUE_ID: 06-weather-aqi -->

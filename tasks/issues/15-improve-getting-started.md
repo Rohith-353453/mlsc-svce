@@ -16,4 +16,4 @@ Help newcomers by adding tutorials, architectural diagrams, or better onboarding
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 15-improve-getting-started -->
+<!-- DEV_DAYS_ISSUE_ID: 15-improve-getting-started -->

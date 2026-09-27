@@ -16,4 +16,4 @@ Create a tool allowing users to query the datasets with natural language.
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 12-ask-data -->
+<!-- DEV_DAYS_ISSUE_ID: 12-ask-data -->

@@ -1,6 +1,6 @@
 # Data Sources
 
-**Note:** All datasets in this repository are **SYNTHETIC** sample data generated for the DevDash event. They do not represent real-world entities, locations, or measurements.
+**Note:** All datasets in this repository are **SYNTHETIC** sample data generated for the Dev Days event. They do not represent real-world entities, locations, or measurements.
 
 - **Cities:** Synthetic data generated for demonstration purposes.
 - **Education:** Synthetic institutional data.

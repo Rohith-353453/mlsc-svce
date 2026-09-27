@@ -1,7 +1,7 @@
-# DevDash Open Data
+# Dev Days Open Data
 
-Welcome to the DevDash open-data event repository! 
-This is a community open-data repository for the DevDash event.
+Welcome to the Dev Days open-data event repository! 
+This is a community open-data repository for the Dev Days event.
 
 ## Core Message
 Explore the data. Pick an issue. Build something useful.

@@ -16,4 +16,4 @@ Contribute notebooks or charts that help visualize the datasets.
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 14-viz-examples -->
+<!-- DEV_DAYS_ISSUE_ID: 14-viz-examples -->

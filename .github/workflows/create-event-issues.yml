@@ -31,7 +31,7 @@ jobs:
             
             for (const file of files) {
               const content = fs.readFileSync(path.join(issuesDir, file), 'utf8');
-              const issueIdMatch = content.match(/<!-- DEV_DASH_ISSUE_ID: (.*?) -->/);
+              const issueIdMatch = content.match(/<!-- DEV_DAYS_ISSUE_ID: (.*?) -->/);
               if (!issueIdMatch) continue;
               const issueId = issueIdMatch[1];
               
@@ -41,7 +41,7 @@ jobs:
               const labelsMatch = content.match(/^labels:\s*(.*)/m);
               const labels = labelsMatch ? labelsMatch[1].split(',').map(l => l.trim()) : [];
               
-              const exists = existingIssues.some(issue => issue.body && issue.body.includes(`<!-- DEV_DASH_ISSUE_ID: ${issueId} -->`));
+              const exists = existingIssues.some(issue => issue.body && issue.body.includes(`<!-- DEV_DAYS_ISSUE_ID: ${issueId} -->`));
               
               if (exists) {
                 console.log(`Issue already exists: ${title}`);

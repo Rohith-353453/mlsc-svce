@@ -16,4 +16,4 @@ Explore hospitals, schools, and facilities by city.
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 08-services-explorer -->
+<!-- DEV_DAYS_ISSUE_ID: 08-services-explorer -->

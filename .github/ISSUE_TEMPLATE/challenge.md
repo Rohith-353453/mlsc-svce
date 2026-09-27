@@ -1,6 +1,6 @@
 ---
 name: New Challenge
-about: Propose a new challenge for DevDash
+about: Propose a new challenge for Dev Days
 title: '[Challenge]: '
 labels: challenge
 assignees: ''

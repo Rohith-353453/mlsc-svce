@@ -1,4 +1,4 @@
-# Contributing to DevDash
+# Contributing to Dev Days
 
 Thanks for participating! Here is how to contribute:
 

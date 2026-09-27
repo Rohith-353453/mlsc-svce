@@ -16,4 +16,4 @@ Create a tool to search institutions by city and display details.
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 03-edu-finder -->
+<!-- DEV_DAYS_ISSUE_ID: 03-edu-finder -->

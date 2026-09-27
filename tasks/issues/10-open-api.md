@@ -16,4 +16,4 @@ Create a backend API that serves this CSV data via REST or GraphQL endpoints.
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 10-open-api -->
+<!-- DEV_DAYS_ISSUE_ID: 10-open-api -->

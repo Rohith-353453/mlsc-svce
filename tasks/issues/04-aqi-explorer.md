@@ -16,4 +16,4 @@ Visualize air quality data over time from `air_quality.csv`.
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 04-aqi-explorer -->
+<!-- DEV_DAYS_ISSUE_ID: 04-aqi-explorer -->

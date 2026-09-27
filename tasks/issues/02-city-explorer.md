@@ -16,4 +16,4 @@ Build a simple app or script to list and filter cities from `cities.csv`.
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 02-city-explorer -->
+<!-- DEV_DAYS_ISSUE_ID: 02-city-explorer -->

@@ -16,4 +16,4 @@ Combine data from all five domains into a comprehensive dashboard. This is the m
 - Code is well-documented.
 
 *Note: You can use any technology you like.*
-<!-- DEV_DASH_ISSUE_ID: 09-city-dashboard -->
+<!-- DEV_DAYS_ISSUE_ID: 09-city-dashboard -->
