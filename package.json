@@ -1,0 +1,8 @@
+{
+  "name": "dev-days-weather-explorer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/app.test.js"
+  }
+}

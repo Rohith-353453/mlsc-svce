@@ -21,6 +21,13 @@ We provide data across 5 domains:
 4. Build a solution using any language, framework, or tools you prefer. We highly encourage using GitHub Copilot to help build your application!
 5. Follow our [Contributing Guide](CONTRIBUTING.md) to submit a Pull Request.
 
+## Weather Explorer
+
+Open `index.html` through a local static server to browse the weather dataset with city and date
+filters. For example, run `npx serve .` from the repository root, then open the local URL shown in
+the terminal. The explorer joins `weather.csv` to `cities.csv` using `city_id` and displays
+temperature in °C and precipitation in mm.
+
 ## For Organizers
 To populate the GitHub issues automatically:
 1. Go to the "Actions" tab in this repository.

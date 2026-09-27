@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A calm, focused explorer for the Dev Days weather dataset."
+    />
+    <title>Weather Explorer | Dev Days Open Data</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div class="eyebrow"><span class="status-dot"></span> DEV DAYS / ENVIRONMENT</div>
+        <h1>Weather, at a glance.</h1>
+        <p class="hero-copy">
+          Browse daily temperature and rainfall readings across the cities in the open-data
+          collection.
+        </p>
+        <a class="source-link" href="data/environment/weather.csv">View source data <span>↗</span></a>
+      </header>
+
+      <section class="controls-panel" aria-label="Weather filters">
+        <div class="control">
+          <label for="city-filter">City</label>
+          <select id="city-filter">
+            <option value="all">All cities</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="date-filter">Date</label>
+          <select id="date-filter">
+            <option value="all">All dates</option>
+          </select>
+        </div>
+        <button id="clear-filters" class="clear-button" type="button">Clear filters</button>
+      </section>
+
+      <section class="summary-grid" aria-label="Weather summary">
+        <article class="metric-card">
+          <div class="metric-label">Readings shown</div>
+          <div id="reading-count" class="metric-value">—</div>
+          <div class="metric-note">daily observations</div>
+        </article>
+        <article class="metric-card accent-card">
+          <div class="metric-label">Average temperature</div>
+          <div id="average-temperature" class="metric-value">—</div>
+          <div class="metric-note">degrees Celsius</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-label">Total rainfall</div>
+          <div id="total-rainfall" class="metric-value">—</div>
+          <div class="metric-note">millimetres in view</div>
+        </article>
+      </section>
+
+      <section class="table-section" aria-labelledby="readings-title">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">DAILY READINGS</div>
+            <h2 id="readings-title">Weather log</h2>
+          </div>
+          <div id="result-label" class="result-label">Loading data…</div>
+        </div>
+        <div id="error-message" class="message error-message" role="alert" hidden></div>
+        <div id="empty-message" class="message" hidden>
+          No readings match those filters. Try widening your search.
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">City</th>
+                <th scope="col">Temperature</th>
+                <th scope="col">Precipitation</th>
+              </tr>
+            </thead>
+            <tbody id="weather-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer>
+        <span>Dev Days Open Data</span>
+        <span>Weather dataset · <a href="docs/data-dictionary.md">Data dictionary</a></span>
+      </footer>
+    </main>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
