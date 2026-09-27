@@ -1,0 +1,4 @@
+city_id,name,state,population,latitude,longitude
+C1,Techville,TX,150000,32.77,-96.79
+C2,Dataport,CA,80000,37.77,-122.41
+C3,Innovia,NY,300000,40.71,-74.0

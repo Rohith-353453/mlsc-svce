@@ -1,0 +1,3 @@
+route_id,type,start_station_id,end_station_id
+R1,Train,S1,S2
+R2,Train,S2,S3

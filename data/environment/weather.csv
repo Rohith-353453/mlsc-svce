@@ -1,0 +1,4 @@
+record_id,city_id,date,temp_c,precipitation_mm
+W1,C1,2026-09-01,28.5,0.0
+W2,C2,2026-09-01,22.1,1.2
+W3,C3,2026-09-01,18.9,5.5

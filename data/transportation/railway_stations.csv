@@ -1,0 +1,4 @@
+station_id,name,city_id,lines
+S1,Techville Central,C1,4
+S2,Dataport North,C2,2
+S3,Innovia Grand,C3,8

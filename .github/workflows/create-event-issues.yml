@@ -1,0 +1,58 @@
+name: Create Event Issues
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create issues from markdown
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            const issuesDir = 'tasks/issues';
+            if (!fs.existsSync(issuesDir)) return;
+            const files = fs.readdirSync(issuesDir).filter(f => f.endsWith('.md'));
+            
+            // Get existing issues
+            const existingIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all'
+            });
+            
+            for (const file of files) {
+              const content = fs.readFileSync(path.join(issuesDir, file), 'utf8');
+              const issueIdMatch = content.match(/<!-- DEV_DASH_ISSUE_ID: (.*?) -->/);
+              if (!issueIdMatch) continue;
+              const issueId = issueIdMatch[1];
+              
+              const titleMatch = content.match(/^title:\s*"(.*?)"/m);
+              const title = titleMatch ? titleMatch[1] : file;
+              
+              const labelsMatch = content.match(/^labels:\s*(.*)/m);
+              const labels = labelsMatch ? labelsMatch[1].split(',').map(l => l.trim()) : [];
+              
+              const exists = existingIssues.some(issue => issue.body && issue.body.includes(`<!-- DEV_DASH_ISSUE_ID: ${issueId} -->`));
+              
+              if (exists) {
+                console.log(`Issue already exists: ${title}`);
+              } else {
+                console.log(`Creating issue: ${title}`);
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: title,
+                  body: content,
+                  labels: labels
+                });
+              }
+            }

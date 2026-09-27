@@ -1,0 +1,4 @@
+record_id,city_id,date,aqi,main_pollutant
+AQ1,C1,2026-09-01,42,PM2.5
+AQ2,C2,2026-09-01,35,Ozone
+AQ3,C3,2026-09-01,55,PM10
