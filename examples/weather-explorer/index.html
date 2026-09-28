@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f6f1">
+    <title>Weather Explorer · Dev Days Open Data</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1b3028;
+        --muted: #68776e;
+        --line: #e2e8e0;
+        --paper: #fff;
+        --canvas: #f4f6f1;
+        --green: #176c4b;
+        --green-soft: #eaf3ed;
+        --blue: #386b92;
+        --blue-soft: #eaf1f6;
+        --orange: #c17b36;
+        font-family: "DM Sans", sans-serif;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--canvas); color: var(--ink); }
+      button, input, select { font: inherit; }
+      .shell { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+      header { border-bottom: 1px solid var(--line); background: rgba(255,255,255,.78); }
+      .topbar { height: 68px; display: flex; align-items: center; justify-content: space-between; }
+      .brand { display: flex; align-items: center; gap: 11px; font-family: Manrope, sans-serif; font-size: 14px; font-weight: 800; letter-spacing: -.03em; }
+      .brand-mark { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 10px; background: var(--green); color: white; font-size: 17px; }
+      .top-note { color: var(--muted); font-size: 12px; }
+      main { padding: 46px 0 68px; }
+      .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--green); font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+      .eyebrow::before { width: 18px; height: 1px; content: ""; background: var(--green); }
+      h1 { margin: 13px 0 9px; font-family: Manrope, sans-serif; font-size: clamp(34px, 5vw, 48px); letter-spacing: -.065em; line-height: 1.08; }
+      .intro { max-width: 590px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
+      .intro strong { color: var(--ink); font-weight: 600; }
+      .filters { display: flex; flex-wrap: wrap; align-items: end; gap: 14px; margin: 30px 0 18px; padding: 17px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
+      .field { display: grid; gap: 7px; }
+      .field label { color: var(--muted); font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+      select, input[type="date"] { min-height: 39px; padding: 0 11px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); font-size: 13px; }
+      select { min-width: 205px; }
+      input[type="date"] { width: 157px; }
+      select:focus, input:focus, button:focus-visible { outline: 2px solid #75aa8d; outline-offset: 2px; }
+      .date-fields { display: flex; gap: 9px; }
+      .reset { min-height: 39px; margin-left: auto; padding: 0 13px; border: 0; border-radius: 8px; background: var(--green-soft); color: var(--green); cursor: pointer; font-size: 12px; font-weight: 700; }
+      .reset:hover { background: #dcebe0; }
+      .summary { display: flex; justify-content: space-between; align-items: center; margin: 27px 0 12px; }
+      h2 { margin: 0; font-family: Manrope, sans-serif; font-size: 17px; letter-spacing: -.035em; }
+      .period { color: var(--muted); font-family: "DM Mono", monospace; font-size: 10px; }
+      .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; }
+      .metric { min-height: 121px; padding: 17px 19px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+      .metric-label { color: var(--muted); font-size: 12px; }
+      .metric-value { margin-top: 12px; font-family: Manrope, sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -.06em; }
+      .metric-value small { font-size: 14px; font-weight: 600; letter-spacing: -.02em; }
+      .metric-foot { margin-top: 3px; color: var(--muted); font-size: 11px; }
+      .panel { margin-top: 15px; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+      .panel-heading { display: flex; align-items: center; justify-content: space-between; padding: 17px 19px 13px; }
+      .panel-heading h2 { font-size: 14px; }
+      .legend { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 10px; }
+      .legend-dot { width: 8px; height: 8px; border-radius: 3px; background: var(--blue); }
+      .chart { min-height: 150px; display: flex; align-items: end; gap: 10px; overflow-x: auto; padding: 12px 19px 15px; border-top: 1px solid #f0f2ed; }
+      .day { min-width: 68px; flex: 1; display: grid; grid-template-rows: 15px 82px 17px; align-items: end; text-align: center; }
+      .day-total { color: var(--muted); font-family: "DM Mono", monospace; font-size: 9px; }
+      .bar-track { height: 82px; display: flex; align-items: end; justify-content: center; }
+      .bar { width: min(35px, 70%); min-height: 3px; border-radius: 5px 5px 2px 2px; background: var(--blue); }
+      .day-date { align-self: end; color: var(--muted); font-family: "DM Mono", monospace; font-size: 9px; }
+      .table-head { display: flex; justify-content: space-between; align-items: center; padding: 23px 0 11px; }
+      .result-count { color: var(--muted); font-family: "DM Mono", monospace; font-size: 10px; }
+      .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+      table { width: 100%; border-collapse: collapse; text-align: left; }
+      th { padding: 12px 18px; color: var(--muted); font-family: "DM Mono", monospace; font-size: 9px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
+      td { padding: 14px 18px; border-top: 1px solid #edf0eb; font-size: 12px; }
+      td.numeric { font-family: "DM Mono", monospace; font-size: 11px; }
+      .city-name { font-weight: 700; }
+      .city-id { display: block; margin-top: 3px; color: var(--muted); font-family: "DM Mono", monospace; font-size: 9px; }
+      .rain { display: inline-flex; align-items: center; gap: 7px; }
+      .rain::before { width: 6px; height: 6px; border-radius: 50%; content: ""; background: var(--blue); }
+      .empty { padding: 31px 18px; color: var(--muted); text-align: center; }
+      .status { margin-top: 12px; color: var(--muted); font-size: 11px; }
+      .status.error { color: #a24335; }
+      footer { margin-top: 25px; color: var(--muted); font-size: 10px; }
+      footer a { color: var(--green); text-decoration: none; }
+      @media (max-width: 650px) {
+        .shell { width: min(100% - 30px, 1120px); }
+        main { padding-top: 33px; }
+        .top-note { display: none; }
+        .filters { align-items: stretch; }
+        .field, select { width: 100%; }
+        .date-fields { display: grid; grid-template-columns: 1fr 1fr; }
+        input[type="date"] { width: 100%; }
+        .reset { margin-left: 0; }
+        .metrics { gap: 8px; }
+        .metric { min-height: 104px; padding: 13px 11px; }
+        .metric-label { font-size: 10px; }
+        .metric-value { font-size: 24px; }
+        .metric-value small { font-size: 11px; }
+        .metric-foot { font-size: 9px; }
+        td, th { padding-right: 12px; padding-left: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="shell topbar">
+        <div class="brand"><span class="brand-mark" aria-hidden="true">↗</span> Dev Days <span style="color:#9aa69e;font-weight:500">/ Open Data</span></div>
+        <div class="top-note">A little more context for today’s forecast.</div>
+      </div>
+    </header>
+    <main class="shell">
+      <div class="eyebrow">Environment / Field notes</div>
+      <h1>Weather, at a glance.</h1>
+      <p class="intro">A clear view of daily conditions across our cities. Find a place, narrow the dates, and see how the sky has been behaving.</p>
+
+      <section class="filters" aria-label="Filter weather observations">
+        <div class="field">
+          <label for="city-filter">City</label>
+          <select id="city-filter" disabled><option value="">Every city</option></select>
+        </div>
+        <div class="field">
+          <label>Date range</label>
+          <div class="date-fields">
+            <input id="date-from" type="date" aria-label="From date" disabled>
+            <input id="date-to" type="date" aria-label="To date" disabled>
+          </div>
+        </div>
+        <button class="reset" id="reset-filters" type="button" disabled>Reset filters</button>
+      </section>
+
+      <div class="summary">
+        <h2>Conditions summary</h2>
+        <span class="period" id="summary-period">Loading observations…</span>
+      </div>
+      <section class="metrics" aria-label="Weather summary statistics">
+        <article class="metric">
+          <div class="metric-label">Observations</div>
+          <div class="metric-value" id="observation-count">—</div>
+          <div class="metric-foot">matching your filters</div>
+        </article>
+        <article class="metric">
+          <div class="metric-label">Average temperature</div>
+          <div class="metric-value" id="average-temperature">— <small>°C</small></div>
+          <div class="metric-foot">across matching observations</div>
+        </article>
+        <article class="metric">
+          <div class="metric-label">Total precipitation</div>
+          <div class="metric-value" id="total-precipitation">— <small>mm</small></div>
+          <div class="metric-foot">across matching observations</div>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="rain-chart-title">
+        <div class="panel-heading">
+          <h2 id="rain-chart-title">Precipitation by day</h2>
+          <span class="legend"><span class="legend-dot" aria-hidden="true"></span> Total rainfall · mm</span>
+        </div>
+        <div class="chart" id="precipitation-chart" aria-label="Daily precipitation chart"></div>
+      </section>
+
+      <div class="table-head">
+        <h2>Daily observations</h2>
+        <span class="result-count" id="result-count"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">City</th><th scope="col">Date</th><th scope="col">Temperature</th><th scope="col">Precipitation</th></tr></thead>
+          <tbody id="weather-rows"><tr><td class="empty" colspan="4">Loading weather data…</td></tr></tbody>
+        </table>
+      </div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <footer>
+        Temperature in degrees Celsius (°C) · Precipitation in millimeters (mm) ·
+        Source: <a href="../../data/environment/weather.csv">weather.csv</a> and <a href="../../data/cities/cities.csv">cities.csv</a>
+      </footer>
+    </main>
+    <script type="module">
+      import { filterWeather, joinCities, parseCsv, summarizeWeather } from "./weather-explorer.mjs";
+
+      const elements = Object.fromEntries(
+        ["city-filter", "date-from", "date-to", "reset-filters", "summary-period",
+          "observation-count", "average-temperature", "total-precipitation",
+          "precipitation-chart", "result-count", "weather-rows", "status"]
+          .map((id) => [id, document.getElementById(id)])
+      );
+      let observations = [];
+
+      function makeCell(text, className) {
+        const cell = document.createElement("td");
+        if (className) cell.className = className;
+        cell.textContent = text;
+        return cell;
+      }
+
+      function render() {
+        const rows = filterWeather(observations, {
+          cityId: elements["city-filter"].value,
+          fromDate: elements["date-from"].value,
+          toDate: elements["date-to"].value,
+        });
+        const summary = summarizeWeather(rows);
+        elements["observation-count"].textContent = String(summary.count);
+        elements["average-temperature"].replaceChildren(
+          document.createTextNode(summary.averageTemperature === null ? "— " : `${summary.averageTemperature.toFixed(1)} `),
+          Object.assign(document.createElement("small"), { textContent: "°C" }),
+        );
+        elements["total-precipitation"].replaceChildren(
+          document.createTextNode(`${summary.totalPrecipitation.toFixed(1)} `),
+          Object.assign(document.createElement("small"), { textContent: "mm" }),
+        );
+        elements["result-count"].textContent = `${rows.length} ${rows.length === 1 ? "record" : "records"}`;
+        elements["summary-period"].textContent = rows.length
+          ? `${rows[0].date}${rows[0].date === rows[rows.length - 1].date ? "" : ` — ${rows[rows.length - 1].date}`}`
+          : "No matching observations";
+        renderChart(rows);
+        renderTable(rows);
+      }
+
+      function renderChart(rows) {
+        const byDate = new Map();
+        for (const row of rows) {
+          byDate.set(row.date, (byDate.get(row.date) || 0) + row.precipitation_mm);
+        }
+        const days = [...byDate].sort(([a], [b]) => a.localeCompare(b));
+        const max = Math.max(0, ...days.map(([, total]) => total));
+        elements["precipitation-chart"].replaceChildren();
+        if (!days.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = "No data for this selection.";
+          elements["precipitation-chart"].append(empty);
+          return;
+        }
+        for (const [date, total] of days) {
+          const day = document.createElement("div");
+          day.className = "day";
+          const totalLabel = document.createElement("span");
+          totalLabel.className = "day-total";
+          totalLabel.textContent = `${total.toFixed(1)} mm`;
+          const track = document.createElement("div");
+          track.className = "bar-track";
+          const bar = document.createElement("span");
+          bar.className = "bar";
+          bar.style.height = `${max === 0 ? 3 : Math.max(3, (total / max) * 78)}px`;
+          bar.title = `${date}: ${total.toFixed(1)} mm precipitation`;
+          bar.setAttribute("aria-label", `${date}: ${total.toFixed(1)} millimeters precipitation`);
+          track.append(bar);
+          const dateLabel = document.createElement("span");
+          dateLabel.className = "day-date";
+          dateLabel.textContent = date.slice(5);
+          day.append(totalLabel, track, dateLabel);
+          elements["precipitation-chart"].append(day);
+        }
+      }
+
+      function renderTable(rows) {
+        elements["weather-rows"].replaceChildren();
+        if (!rows.length) {
+          const cell = makeCell("No observations match these filters. Try a different city or date range.", "empty");
+          cell.colSpan = 4;
+          const row = document.createElement("tr");
+          row.append(cell);
+          elements["weather-rows"].append(row);
+          return;
+        }
+        for (const observation of rows) {
+          const row = document.createElement("tr");
+          const city = document.createElement("td");
+          const name = document.createElement("span");
+          name.className = "city-name";
+          name.textContent = observation.cityName;
+          const id = document.createElement("span");
+          id.className = "city-id";
+          id.textContent = observation.city_id;
+          city.append(name, id);
+          row.append(city, makeCell(observation.date, "numeric"));
+          row.append(makeCell(`${observation.temp_c.toFixed(1)} °C`, "numeric"));
+          const precipitation = makeCell("", "numeric");
+          const rain = document.createElement("span");
+          rain.className = "rain";
+          rain.textContent = `${observation.precipitation_mm.toFixed(1)} mm`;
+          precipitation.append(rain);
+          row.append(precipitation);
+          elements["weather-rows"].append(row);
+        }
+      }
+
+      for (const control of [elements["city-filter"], elements["date-from"], elements["date-to"]]) {
+        control.addEventListener("change", render);
+      }
+      elements["reset-filters"].addEventListener("click", () => {
+        elements["city-filter"].value = "";
+        elements["date-from"].value = "";
+        elements["date-to"].value = "";
+        render();
+      });
+
+      async function loadWeather() {
+        try {
+          const [weatherResponse, citiesResponse] = await Promise.all([
+            fetch("../../data/environment/weather.csv"),
+            fetch("../../data/cities/cities.csv"),
+          ]);
+          if (!weatherResponse.ok || !citiesResponse.ok) {
+            throw new Error(`Could not load CSV files (weather: ${weatherResponse.status}, cities: ${citiesResponse.status}).`);
+          }
+          const [weatherText, citiesText] = await Promise.all([weatherResponse.text(), citiesResponse.text()]);
+          const weatherRows = parseCsv(weatherText);
+          const cities = parseCsv(citiesText);
+          observations = joinCities(weatherRows, cities);
+          if (!observations.length) throw new Error("The weather dataset contains no observations.");
+
+          const cityFilter = elements["city-filter"];
+          const cityIds = [...new Set(observations.map((row) => row.city_id))].sort();
+          for (const cityId of cityIds) {
+            const option = document.createElement("option");
+            option.value = cityId;
+            option.textContent = `${observations.find((row) => row.city_id === cityId).cityName} · ${cityId}`;
+            cityFilter.append(option);
+          }
+          const dates = observations.map((row) => row.date).sort();
+          elements["date-from"].min = dates[0];
+          elements["date-from"].max = dates[dates.length - 1];
+          elements["date-to"].min = dates[0];
+          elements["date-to"].max = dates[dates.length - 1];
+          for (const control of [cityFilter, elements["date-from"], elements["date-to"], elements["reset-filters"]]) {
+            control.disabled = false;
+          }
+          elements.status.textContent = `${observations.length} observations loaded.`;
+          render();
+        } catch (error) {
+          elements.status.textContent = `Unable to load weather data: ${error.message} Serve the repository root over HTTP and try again.`;
+          elements.status.classList.add("error");
+          elements["weather-rows"].replaceChildren();
+          const cell = makeCell("Weather data could not be loaded.", "empty");
+          cell.colSpan = 4;
+          const row = document.createElement("tr");
+          row.append(cell);
+          elements["weather-rows"].append(row);
+        }
+      }
+
+      loadWeather();
+    </script>
+  </body>
+</html>
