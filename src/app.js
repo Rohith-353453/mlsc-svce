@@ -1,4 +1,4 @@
-import { cities, filterWeather, joinWeatherToCities, summarizeWeather, weatherRows } from "./data.js";
+import { cities, describeCoverage, filterWeather, joinWeatherToCities, summarizeWeather, weatherRows } from "./data.js";
 
 const joinedRows = joinWeatherToCities(weatherRows, cities);
 const cityFilter = document.querySelector("#city-filter");
@@ -10,6 +10,7 @@ const averageTemp = document.querySelector("#average-temp");
 const totalRain = document.querySelector("#total-rain");
 const wettestPlace = document.querySelector("#wettest-place");
 const chart = document.querySelector("#rain-chart");
+const coverageNote = document.querySelector("#coverage-note");
 
 for (const city of cities) {
   const option = document.createElement("option");
@@ -47,6 +48,7 @@ function render() {
   const rows = filterWeather(joinedRows, { cityId: cityFilter.value, date: dateFilter.value });
   const summary = summarizeWeather(rows);
   resultCount.textContent = `${rows.length} ${rows.length === 1 ? "observation" : "observations"}`;
+  coverageNote.textContent = describeCoverage(rows);
   averageTemp.textContent = summary.averageTemp === null ? "—" : `${summary.averageTemp.toFixed(1)}°C`;
   totalRain.textContent = `${summary.totalPrecipitation.toFixed(1)} mm`;
   wettestPlace.textContent = summary.wettest ? `${summary.wettest.city?.name ?? summary.wettest.city_id} · ${summary.wettest.precipitation_mm.toFixed(1)} mm` : "—";

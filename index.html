@@ -31,6 +31,7 @@
         <label>Date<input id="date-filter" type="date"></label>
         <button id="reset-filters" class="reset-button" type="button">Reset</button>
       </section>
+      <p id="coverage-note" class="coverage-note" role="status"></p>
       <section class="summary-grid" aria-label="Weather summary">
         <article class="metric-card"><span class="metric-label">Average temperature</span><strong id="average-temp">—</strong><span class="metric-note">Across current results</span></article>
         <article class="metric-card accent"><span class="metric-label">Total precipitation</span><strong id="total-rain">—</strong><span class="metric-note">Accumulated rainfall</span></article>
@@ -39,7 +40,7 @@
       <section class="content-grid">
         <article class="panel observations-panel">
           <div class="panel-header"><div><p class="eyebrow">Live results</p><h2>Observations</h2></div><span id="result-count" class="result-count"></span></div>
-          <div class="table-wrap"><table><thead><tr><th>City</th><th>Date</th><th>Temperature</th><th>Precipitation</th></tr></thead><tbody id="weather-table-body"></tbody></table></div>
+          <div class="table-wrap"><table><caption class="sr-only">Weather readings by city and recorded date</caption><thead><tr><th scope="col">City</th><th scope="col">Recorded date</th><th scope="col">Temperature (°C)</th><th scope="col">Precipitation (mm)</th></tr></thead><tbody id="weather-table-body"></tbody></table></div>
           <p class="source-note">Source: <code>data/environment/weather.csv</code> · City names joined from <code>data/cities/cities.csv</code></p>
         </article>
         <aside class="panel chart-panel"><div class="panel-header"><div><p class="eyebrow">At a glance</p><h2>Rainfall by city</h2></div><span class="chart-unit">mm</span></div><div id="rain-chart" class="chart"></div><div class="legend"><span class="legend-dot"></span> Precipitation amount</div></aside>

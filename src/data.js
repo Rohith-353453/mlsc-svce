@@ -27,3 +27,17 @@ export function summarizeWeather(rows) {
     wettest: rows.reduce((wettest, row) => row.precipitation_mm > wettest.precipitation_mm ? row : wettest, rows[0])
   };
 }
+
+export function describeCoverage(rows) {
+  if (!rows.length) return "No recorded readings match these filters.";
+
+  const dates = new Set(rows.map((row) => row.date));
+  const cityDatePairs = new Set(rows.map((row) => `${row.city_id}:${row.date}`));
+  const hasRepeatedCityDate = cityDatePairs.size < rows.length;
+  const dateLabel = dates.size === 1 ? "recorded date" : "recorded dates";
+  const repeatNote = hasRepeatedCityDate
+    ? "Some city/date pairs have more than one reading."
+    : "There is one reading per city and date.";
+
+  return `Showing ${rows.length} reading${rows.length === 1 ? "" : "s"} across ${dates.size} ${dateLabel}. ${repeatNote} This is a limited sample, not a continuous time series.`;
+}

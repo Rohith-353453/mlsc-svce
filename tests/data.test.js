@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { cities, filterWeather, joinWeatherToCities, summarizeWeather, weatherRows } from "../src/data.js";
+import { cities, describeCoverage, filterWeather, joinWeatherToCities, summarizeWeather, weatherRows } from "../src/data.js";
 
 test("joins every weather observation to its city by city_id", () => {
   const joined = joinWeatherToCities(weatherRows, cities);
@@ -19,4 +19,10 @@ test("summarizes the currently visible observations", () => {
   assert.equal(summary.averageTemp.toFixed(1), "23.2");
   assert.equal(summary.totalPrecipitation, 6.7);
   assert.equal(summary.wettest.city_id, "C3");
+});
+
+test("makes the limited, non-repeated sample coverage explicit", () => {
+  assert.match(describeCoverage(weatherRows), /one reading per city and date/);
+  assert.match(describeCoverage(weatherRows), /limited sample, not a continuous time series/);
+  assert.match(describeCoverage([]), /No recorded readings/);
 });
