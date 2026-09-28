@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A focused weather explorer for city-level temperature and precipitation data." />
+    <title>Weather Explorer | Dev Days Open Data</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Open data / Environment</div>
+        <div class="hero-row">
+          <div>
+            <h1>Weather<br /><em>Explorer</em></h1>
+            <p class="intro">A clear view of how the day feels across the cities in the dataset.</p>
+          </div>
+          <div class="sun-mark" aria-hidden="true">
+            <span class="sun-core"></span>
+            <span class="ray ray-1"></span><span class="ray ray-2"></span><span class="ray ray-3"></span>
+            <span class="ray ray-4"></span><span class="ray ray-5"></span><span class="ray ray-6"></span>
+          </div>
+        </div>
+      </header>
+
+      <section class="controls-panel" aria-labelledby="filters-heading">
+        <div class="section-kicker" id="filters-heading">Explore the data</div>
+        <div class="filters">
+          <label class="field">
+            <span>City</span>
+            <select id="city-filter">
+              <option value="all">All cities</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Date</span>
+            <input id="date-filter" type="date" />
+          </label>
+          <button class="clear-button" id="clear-filters" type="button">Clear filters <span>↗</span></button>
+        </div>
+        <div class="filter-status" id="filter-status" aria-live="polite"></div>
+      </section>
+
+      <section class="metrics" aria-label="Weather summary">
+        <article class="metric-card metric-card-highlight">
+          <span class="metric-label">Average temperature</span>
+          <strong id="average-temp">—</strong>
+          <span class="metric-caption">Across the selection · °C</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Total precipitation</span>
+          <strong id="total-rain">—</strong>
+          <span class="metric-caption">Across the selection · mm</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Observations</span>
+          <strong id="observation-count">—</strong>
+          <span class="metric-caption">Weather records shown</span>
+        </article>
+      </section>
+
+      <section class="weather-section" aria-labelledby="records-heading">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Daily conditions</div>
+            <h2 id="records-heading">Weather records</h2>
+          </div>
+          <div class="legend"><span class="legend-swatch temp-swatch"></span> Temperature <span class="legend-swatch rain-swatch"></span> Precipitation</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Date</th><th scope="col">City</th><th scope="col">Temperature</th><th scope="col">Precipitation</th></tr>
+            </thead>
+            <tbody id="weather-rows">
+              <tr><td colspan="4" class="loading">Loading weather records…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="empty-state" hidden>
+          <span class="empty-icon">⌁</span>
+          <h3>No records match these filters</h3>
+          <p>Try another city or reset the date to see more observations.</p>
+          <button class="text-button" id="empty-clear" type="button">Reset view</button>
+        </div>
+      </section>
+
+      <footer>
+        <span>Source: <code>data/environment/weather.csv</code></span>
+        <span>Joined with <code>data/cities/cities.csv</code> by <code>city_id</code></span>
+      </footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
