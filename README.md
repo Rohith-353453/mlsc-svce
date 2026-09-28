@@ -6,6 +6,10 @@ This is a community open-data repository for the Dev Days event.
 ## Core Message
 Explore the data. Pick an issue. Build something useful.
 
+## Data Quality Review
+Open the [data quality dashboard](index.html) to review the CSV files for missing values, duplicate records and IDs, inconsistent formatting, invalid values, and broken references. The review runs in your browser and never modifies the source data. For local use, serve this repository directory over HTTP (for example, `python -m http.server 8000`) and open `http://localhost:8000`.
+See the [review guide](docs/data-quality-review.md) for the checks, assumptions, and safe-correction policy.
+
 ## Domains
 We provide data across 5 domains:
 1. Cities
