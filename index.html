@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f7f3">
+    <title>Route Atlas | Public transport explorer</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #18251f;
+        --muted: #69766f;
+        --paper: #f4f7f3;
+        --surface: #fff;
+        --line: #e3eae4;
+        --green: #1f664b;
+        --green-dark: #154b37;
+        --green-soft: #e8f3ec;
+        --amber: #885311;
+        --amber-soft: #fff4df;
+        --shadow: 0 16px 48px rgb(35 59 45 / 8%);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-width: 320px;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse at 95% 0, rgb(205 231 214 / 55%), transparent 35rem),
+          var(--paper);
+      }
+      button, input, select { font: inherit; }
+      button, select { cursor: pointer; }
+      .page { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 76px;
+        border-bottom: 1px solid rgb(44 76 57 / 10%);
+      }
+      .brand { display: flex; align-items: center; gap: 11px; font-size: 14px; font-weight: 750; letter-spacing: -.02em; }
+      .brand-mark {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        color: #fff;
+        background: var(--green);
+        border-radius: 11px;
+      }
+      .brand-mark svg { width: 20px; }
+      .top-link {
+        color: var(--green-dark);
+        font-size: 13px;
+        font-weight: 650;
+        text-decoration: none;
+      }
+      .top-link:hover { text-decoration: underline; }
+
+      main { padding: 54px 0 72px; }
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 15px;
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+      .eyebrow::before { width: 18px; height: 2px; content: ""; background: currentColor; }
+      h1 {
+        max-width: 750px;
+        margin: 0;
+        font-size: clamp(38px, 6vw, 64px);
+        font-weight: 720;
+        letter-spacing: -.065em;
+        line-height: 1.02;
+      }
+      .intro {
+        max-width: 600px;
+        margin: 18px 0 32px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.65;
+      }
+      .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 26px; }
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-height: 86px;
+        padding: 17px 19px;
+        background: rgb(255 255 255 / 78%);
+        border: 1px solid var(--line);
+        border-radius: 15px;
+      }
+      .stat-icon {
+        display: grid;
+        flex: 0 0 42px;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        color: var(--green);
+        background: var(--green-soft);
+        border-radius: 13px;
+      }
+      .stat-icon svg { width: 21px; height: 21px; }
+      .stat-number { display: block; font-size: 23px; font-weight: 750; letter-spacing: -.04em; line-height: 1.1; }
+      .stat-label { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+
+      .explorer {
+        overflow: hidden;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 19px;
+        box-shadow: var(--shadow);
+      }
+      .explorer-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 23px 25px 19px;
+      }
+      .explorer-head h2 { margin: 0; font-size: 17px; letter-spacing: -.025em; }
+      .result-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+      .filters {
+        display: grid;
+        grid-template-columns: minmax(230px, 1fr) minmax(160px, 210px) auto;
+        align-items: end;
+        gap: 12px;
+        padding: 0 25px 20px;
+      }
+      .field label {
+        display: block;
+        margin-bottom: 7px;
+        color: #4b5a51;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .input-wrap { position: relative; }
+      .input-wrap svg {
+        position: absolute;
+        top: 50%;
+        left: 13px;
+        width: 17px;
+        height: 17px;
+        color: #7a8980;
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+      input, select {
+        width: 100%;
+        height: 43px;
+        padding: 0 12px;
+        color: var(--ink);
+        background: #fff;
+        border: 1px solid #dce5dd;
+        border-radius: 10px;
+        outline: none;
+      }
+      input { padding-left: 39px; }
+      input:focus, select:focus { border-color: #5b9874; box-shadow: 0 0 0 3px rgb(59 128 85 / 12%); }
+      input::placeholder { color: #9aa69e; }
+      .reset {
+        height: 43px;
+        padding: 0 14px;
+        color: var(--green-dark);
+        font-size: 12px;
+        font-weight: 700;
+        background: #f3f7f3;
+        border: 1px solid #e1eae2;
+        border-radius: 10px;
+      }
+      .reset:hover { background: var(--green-soft); }
+      .table-scroll { overflow-x: auto; border-top: 1px solid var(--line); }
+      table { width: 100%; border-collapse: collapse; text-align: left; }
+      thead { background: #f8faf8; }
+      th {
+        padding: 12px 20px;
+        color: #728078;
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+      th:first-child, td:first-child { padding-left: 25px; }
+      th:last-child, td:last-child { padding-right: 25px; }
+      td { padding: 17px 20px; border-top: 1px solid #edf1ed; vertical-align: middle; }
+      tbody tr:hover { background: #fbfdfb; }
+      .route-id { color: var(--green-dark); font-size: 13px; font-weight: 800; white-space: nowrap; }
+      .type-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 9px;
+        color: #405349;
+        font-size: 11px;
+        font-weight: 700;
+        background: #f0f4f1;
+        border-radius: 7px;
+        white-space: nowrap;
+      }
+      .type-pill::before { width: 6px; height: 6px; content: ""; background: #4d8764; border-radius: 50%; }
+      .endpoint { min-width: 175px; }
+      .station-name { display: block; font-size: 13px; font-weight: 650; }
+      .station-id { display: block; margin-top: 4px; color: #829087; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10px; }
+      .unresolved { color: var(--amber); }
+      .unresolved .station-name { display: flex; align-items: center; gap: 6px; color: var(--amber); font-size: 12px; font-weight: 700; }
+      .unresolved .station-name::before {
+        display: inline-grid;
+        width: 15px;
+        height: 15px;
+        content: "!";
+        place-items: center;
+        font-size: 10px;
+        font-weight: 800;
+        background: #ffe6b2;
+        border-radius: 50%;
+      }
+      .connection {
+        position: relative;
+        width: 34px;
+        height: 1px;
+        background: #ccd8ce;
+      }
+      .connection::after {
+        position: absolute;
+        top: -3px;
+        right: 0;
+        width: 6px;
+        height: 6px;
+        content: "";
+        border-top: 1px solid #829087;
+        border-right: 1px solid #829087;
+        transform: rotate(45deg);
+      }
+      .empty-state { display: none; padding: 48px 20px; color: var(--muted); text-align: center; }
+      .empty-state strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: 14px; }
+      .loading { padding: 42px; color: var(--muted); text-align: center; }
+      .error {
+        display: none;
+        margin: 0 25px 20px;
+        padding: 12px 14px;
+        color: #8c2929;
+        font-size: 13px;
+        background: #fff0ef;
+        border: 1px solid #f2d2ce;
+        border-radius: 9px;
+      }
+      .footnote {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        margin: 16px 2px 0;
+        color: #718077;
+        font-size: 11px;
+        line-height: 1.5;
+      }
+      .footnote svg { flex: 0 0 15px; width: 15px; height: 15px; margin-top: 1px; color: var(--green); }
+      footer { padding: 20px 0 0; color: #88958d; font-size: 11px; }
+
+      @media (max-width: 700px) {
+        .page { width: min(100% - 30px, 560px); }
+        main { padding-top: 39px; }
+        .topbar { min-height: 64px; }
+        .top-link { font-size: 11px; }
+        .intro { margin: 14px 0 25px; font-size: 14px; }
+        .stats { gap: 8px; }
+        .stat { min-height: 74px; gap: 8px; padding: 12px 10px; border-radius: 12px; }
+        .stat-icon { flex-basis: 32px; width: 32px; height: 32px; border-radius: 10px; }
+        .stat-icon svg { width: 17px; }
+        .stat-number { font-size: 19px; }
+        .stat-label { font-size: 10px; }
+        .explorer-head { padding: 19px 16px 15px; }
+        .filters { grid-template-columns: 1fr 1fr; padding: 0 16px 16px; }
+        .field:first-child { grid-column: 1 / -1; }
+        .reset { width: 100%; }
+        th { padding: 11px 13px; }
+        td { padding: 14px 13px; }
+        th:first-child, td:first-child { padding-left: 16px; }
+        th:last-child, td:last-child { padding-right: 16px; }
+        .error { margin-right: 16px; margin-left: 16px; }
+      }
+      @media (max-width: 430px) {
+        .brand { font-size: 12px; }
+        .top-link { max-width: 115px; text-align: right; }
+        .stat { align-items: flex-start; flex-direction: column; gap: 7px; }
+        .stat-icon { display: none; }
+        .stats { margin-bottom: 18px; }
+        .result-count { font-size: 10px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 19V5m0 0 5 5 4-4 5 5M5 19l5-5 4 4 5-5" />
+              <circle cx="5" cy="5" r="1.5" fill="currentColor" />
+              <circle cx="19" cy="11" r="1.5" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Route Atlas</span>
+        </div>
+        <a class="top-link" href="https://github.com/Rohith-353453/mlsc-svce/tree/main/data/transportation" target="_blank" rel="noreferrer">View transportation data <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <main>
+        <p class="eyebrow">Public transport explorer</p>
+        <h1>Every route,<br>connected.</h1>
+        <p class="intro">Browse the routes in the network and see where each journey begins and ends. Station names are matched directly from the railway stations dataset.</p>
+
+        <section class="stats" aria-label="Network overview">
+          <div class="stat">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14v10H5zM8 19l2-4m6 4-2-4M8 8h.01M16 8h.01M8 12h8" /></svg>
+            </span>
+            <span><strong class="stat-number" id="route-total">—</strong><span class="stat-label">routes in dataset</span></span>
+          </div>
+          <div class="stat">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z" /><circle cx="12" cy="9" r="2.2" /></svg>
+            </span>
+            <span><strong class="stat-number" id="station-total">—</strong><span class="stat-label">stations available</span></span>
+          </div>
+          <div class="stat">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+            </span>
+            <span><strong class="stat-number" id="match-total">—</strong><span class="stat-label">endpoints matched</span></span>
+          </div>
+        </section>
+
+        <section class="explorer" aria-labelledby="routes-heading">
+          <div class="explorer-head">
+            <h2 id="routes-heading">Routes</h2>
+            <span class="result-count" id="result-count" aria-live="polite">Loading routes…</span>
+          </div>
+          <div class="filters">
+            <div class="field">
+              <label for="route-search">Search routes or stations</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 4 4" /></svg>
+                <input id="route-search" type="search" placeholder="Try a route ID, type, or station…" autocomplete="off">
+              </div>
+            </div>
+            <div class="field">
+              <label for="type-filter">Transport type</label>
+              <select id="type-filter"><option value="">All types</option></select>
+            </div>
+            <button class="reset" id="reset-filters" type="button">Reset filters</button>
+          </div>
+          <div class="error" id="load-error" role="alert"></div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Route ID</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Starting station</th>
+                  <th scope="col" aria-label="Direction"></th>
+                  <th scope="col">Ending station</th>
+                </tr>
+              </thead>
+              <tbody id="route-rows">
+                <tr><td colspan="5" class="loading">Loading transportation data…</td></tr>
+              </tbody>
+            </table>
+            <div class="empty-state" id="empty-state">
+              <strong>No routes match your filters</strong>
+              Try another search or reset the filters to see all routes.
+            </div>
+          </div>
+        </section>
+        <p class="footnote">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.5" /><path d="M10 9v5m0-8h.01" /></svg>
+          Endpoint IDs are shown exactly as recorded. A station name appears only when its ID matches a station in the dataset; unresolved IDs are never inferred.
+        </p>
+        <footer>Data from the Dev Days Open Data transportation datasets.</footer>
+      </main>
+    </div>
+
+    <script>
+      const routesUrl = "data/transportation/routes.csv";
+      const stationsUrl = "data/transportation/railway_stations.csv";
+      const routeRows = document.getElementById("route-rows");
+      const searchInput = document.getElementById("route-search");
+      const typeFilter = document.getElementById("type-filter");
+      const resultCount = document.getElementById("result-count");
+      const emptyState = document.getElementById("empty-state");
+      const loadError = document.getElementById("load-error");
+      let routes = [];
+      let stations = new Map();
+
+      function parseCsv(text) {
+        const rows = [];
+        let row = [];
+        let field = "";
+        let quoted = false;
+
+        for (let index = 0; index < text.length; index += 1) {
+          const char = text[index];
+          if (quoted) {
+            if (char === '"' && text[index + 1] === '"') {
+              field += '"';
+              index += 1;
+            } else if (char === '"') {
+              quoted = false;
+            } else {
+              field += char;
+            }
+          } else if (char === '"') {
+            quoted = true;
+          } else if (char === ",") {
+            row.push(field);
+            field = "";
+          } else if (char === "\n" || char === "\r") {
+            row.push(field);
+            if (row.some((value) => value !== "")) rows.push(row);
+            row = [];
+            field = "";
+            if (char === "\r" && text[index + 1] === "\n") index += 1;
+          } else {
+            field += char;
+          }
+        }
+        if (field !== "" || row.length > 0) {
+          row.push(field);
+          if (row.some((value) => value !== "")) rows.push(row);
+        }
+        if (quoted) throw new Error("A CSV field was opened with a quote but never closed.");
+        if (rows.length === 0) throw new Error("The CSV file is empty.");
+
+        const headers = rows[0].map((header) => header.trim().replace(/^\uFEFF/, ""));
+        return rows.slice(1).map((values, rowIndex) => {
+          if (values.length !== headers.length) {
+            throw new Error(`Row ${rowIndex + 2} has ${values.length} columns; expected ${headers.length}.`);
+          }
+          return Object.fromEntries(headers.map((header, index) => [header, values[index].trim()]));
+        });
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[char]);
+      }
+
+      function endpointMarkup(stationId) {
+        const station = stations.get(stationId);
+        const label = station ? station.name : stationId ? "Unresolved station" : "No station ID recorded";
+        const unresolvedClass = station ? "" : " unresolved";
+        return `<div class="endpoint${unresolvedClass}"><span class="station-name">${escapeHtml(label)}</span><span class="station-id">${escapeHtml(stationId || "—")}</span></div>`;
+      }
+
+      function renderRoutes() {
+        const query = searchInput.value.trim().toLocaleLowerCase();
+        const selectedType = typeFilter.value;
+        const filtered = routes.filter((route) => {
+          const startName = stations.get(route.start_station_id)?.name || "";
+          const endName = stations.get(route.end_station_id)?.name || "";
+          const matchesQuery = [route.route_id, route.type, route.start_station_id, route.end_station_id, startName, endName]
+            .some((value) => value.toLocaleLowerCase().includes(query));
+          return matchesQuery && (!selectedType || route.type === selectedType);
+        });
+
+        routeRows.innerHTML = filtered.map((route) => `
+          <tr>
+            <td><span class="route-id">${escapeHtml(route.route_id || "—")}</span></td>
+            <td><span class="type-pill">${escapeHtml(route.type || "Unspecified")}</span></td>
+            <td>${endpointMarkup(route.start_station_id)}</td>
+            <td><span class="connection" aria-label="to"></span></td>
+            <td>${endpointMarkup(route.end_station_id)}</td>
+          </tr>`).join("");
+        emptyState.style.display = filtered.length === 0 ? "block" : "none";
+        resultCount.textContent = `Showing ${filtered.length} of ${routes.length} ${routes.length === 1 ? "route" : "routes"}`;
+      }
+
+      async function loadData() {
+        try {
+          const [routesResponse, stationsResponse] = await Promise.all([
+            fetch(routesUrl),
+            fetch(stationsUrl)
+          ]);
+          if (!routesResponse.ok) throw new Error(`Could not load routes.csv (HTTP ${routesResponse.status}).`);
+          if (!stationsResponse.ok) throw new Error(`Could not load railway_stations.csv (HTTP ${stationsResponse.status}).`);
+          const [routesText, stationsText] = await Promise.all([routesResponse.text(), stationsResponse.text()]);
+          routes = parseCsv(routesText);
+          const stationRecords = parseCsv(stationsText);
+          stations = new Map(stationRecords.map((station) => [station.station_id, station]));
+
+          if (!routes.every((route) => ["route_id", "type", "start_station_id", "end_station_id"].every((key) => key in route))) {
+            throw new Error("routes.csv is missing one or more required columns.");
+          }
+          if (!stationRecords.every((station) => ["station_id", "name"].every((key) => key in station))) {
+            throw new Error("railway_stations.csv is missing the station_id or name column.");
+          }
+
+          const endpointIds = routes.flatMap((route) => [route.start_station_id, route.end_station_id]).filter(Boolean);
+          const matchedEndpoints = endpointIds.filter((stationId) => stations.has(stationId)).length;
+          document.getElementById("route-total").textContent = routes.length;
+          document.getElementById("station-total").textContent = stations.size;
+          document.getElementById("match-total").textContent = `${matchedEndpoints}/${endpointIds.length}`;
+
+          [...new Set(routes.map((route) => route.type).filter(Boolean))].sort((a, b) => a.localeCompare(b))
+            .forEach((type) => {
+              const option = document.createElement("option");
+              option.value = type;
+              option.textContent = type;
+              typeFilter.append(option);
+            });
+          renderRoutes();
+        } catch (error) {
+          routeRows.innerHTML = "";
+          resultCount.textContent = "Data unavailable";
+          loadError.textContent = `Unable to display the routes: ${error.message} Check that both transportation CSV files are available and valid.`;
+          loadError.style.display = "block";
+        }
+      }
+
+      searchInput.addEventListener("input", renderRoutes);
+      typeFilter.addEventListener("change", renderRoutes);
+      document.getElementById("reset-filters").addEventListener("click", () => {
+        searchInput.value = "";
+        typeFilter.value = "";
+        searchInput.focus();
+        renderRoutes();
+      });
+
+      loadData();
+    </script>
+  </body>
+</html>
