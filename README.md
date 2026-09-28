@@ -27,3 +27,13 @@ To populate the GitHub issues automatically:
 2. Select the "Create Event Issues" workflow.
 3. Click "Run workflow".
 This will read the markdown files in `tasks/issues/` and create them as issues.
+
+## Weather Explorer
+
+Open `index.html` through a local web server to browse the weather readings by city
+and date. The explorer joins `data/environment/weather.csv` to
+`data/cities/cities.csv` on `city_id`, and displays temperature in °C and
+precipitation in mm.
+
+For example, run `npx serve .` from the repository root, then visit the URL it
+prints. Run `npm test` to verify the CSV parsing, city join, and filters.
