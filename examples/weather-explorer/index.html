@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f7f2">
+    <title>Weather Explorer</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Weather Explorer home">
+          <span class="brand-mark" aria-hidden="true">W</span>
+          <span>Open data <span class="brand-divider">/</span> Environment</span>
+        </a>
+        <span class="data-badge"><span class="status-dot"></span> Synthetic sample data</span>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">CITY CLIMATE, AT A GLANCE</p>
+        <h1 id="page-title">Weather Explorer<span class="title-period">.</span></h1>
+        <p class="intro-copy">A clearer view of daily temperatures and rainfall across our cities.</p>
+      </section>
+
+      <section class="filter-panel" aria-label="Filter weather readings">
+        <label class="filter-field city-field">
+          <span class="field-label">CITY</span>
+          <select id="city-filter" aria-label="Filter by city">
+            <option value="all">All cities</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="field-label">FROM</span>
+          <input id="date-from" type="date" aria-label="Start date">
+        </label>
+        <span class="date-range-mark" aria-hidden="true">→</span>
+        <label class="filter-field">
+          <span class="field-label">TO</span>
+          <input id="date-to" type="date" aria-label="End date">
+        </label>
+        <button class="reset-button" id="reset-filters" type="button">Reset filters</button>
+      </section>
+
+      <p id="filter-error" class="filter-error" role="alert" hidden></p>
+      <p id="load-error" class="load-error" role="alert" hidden></p>
+
+      <section class="summary-grid" aria-label="Weather summary">
+        <article class="summary-card">
+          <span class="summary-label">READINGS</span>
+          <strong id="reading-count" class="summary-value">—</strong>
+          <span class="summary-note">in this selection</span>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">AVERAGE TEMPERATURE</span>
+          <strong id="average-temperature" class="summary-value">—</strong>
+          <span class="summary-note">degrees Celsius (°C)</span>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">TOTAL PRECIPITATION</span>
+          <strong id="total-precipitation" class="summary-value">—</strong>
+          <span class="summary-note">millimeters (mm)</span>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">WARMEST READING</span>
+          <strong id="warmest-reading" class="summary-value">—</strong>
+          <span id="warmest-note" class="summary-note">degrees Celsius (°C)</span>
+        </article>
+      </section>
+
+      <section class="readings-section" aria-labelledby="readings-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">THE DAILY DETAILS</p>
+            <h2 id="readings-heading">Weather readings</h2>
+          </div>
+          <span class="result-count" id="result-count" aria-live="polite">Loading readings…</span>
+        </div>
+        <div id="chart-grid" class="chart-grid" aria-label="Weather readings charts"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">DATE</th>
+                <th scope="col">CITY</th>
+                <th scope="col" class="numeric">TEMPERATURE (°C)</th>
+                <th scope="col" class="numeric">PRECIPITATION (mm)</th>
+              </tr>
+            </thead>
+            <tbody id="weather-rows"></tbody>
+          </table>
+          <p id="empty-state" class="empty-state" hidden>No readings match these filters. Try a different city or date range.</p>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <span>Built from the Dev Days open-data collection.</span>
+        <a href="../../data/environment/weather.csv">Explore the source CSV <span aria-hidden="true">↗</span></a>
+      </footer>
+    </main>
+  </body>
+</html>
