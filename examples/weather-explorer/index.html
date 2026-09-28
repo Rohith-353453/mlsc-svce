@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f6f8">
+    <title>Weather Atlas — City weather explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#" aria-label="Weather Atlas home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 36 36" fill="none"><path d="M11.6 22.5a7.2 7.2 0 0 1 .7-14.3 9.4 9.4 0 0 1 17 5.2 5.4 5.4 0 0 1-.8 10.7H11.6Z" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><path d="m14 28-1.4 3m10-3-1.4 3" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg>
+          </span>
+          <span>weather<span class="brand-light">atlas</span></span>
+        </a>
+
+        <p class="nav-label">WORKSPACE</p>
+        <nav>
+          <a class="nav-item active" href="#overview" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+            Overview
+          </a>
+          <a class="nav-item" href="#weather-table">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16M8 3v4m8 3v4m-8 3v4"/></svg>
+            Weather records
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="source-card">
+            <span class="source-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3.5 4 7.8v8.4l8 4.3 8-4.3V7.8l-8-4.3Z"/><path d="m4.5 8 7.5 4 7.5-4M12 12v8"/></svg>
+            </span>
+            <div><strong>Open data</strong><span>Dev Days collection</span></div>
+            <span class="live-dot" aria-label="Data loaded"></span>
+          </div>
+          <p class="sidebar-note">Weather insights<br>for curious minds.</p>
+        </div>
+      </aside>
+
+      <main id="overview">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Workspace</span><span class="crumb-divider">/</span><strong>Weather explorer</strong></div>
+          <div class="topbar-right">
+            <span class="data-status"><span class="status-dot"></span><span id="load-status">Loading dataset</span></span>
+            <span class="avatar" aria-label="Weather Atlas">WA</span>
+          </div>
+        </header>
+
+        <div class="content">
+          <section class="page-heading">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-mark"></span> ENVIRONMENT / WEATHER</p>
+              <h1>Weather, at a glance.</h1>
+              <p class="page-subtitle">A closer look at daily conditions across the cities in our collection.</p>
+            </div>
+            <div class="updated-label"><span class="sun-icon" aria-hidden="true">☼</span><span>YOUR CITY-BY-CITY<br><strong>WEATHER BRIEFING</strong></span></div>
+          </section>
+
+          <section class="filter-bar" aria-label="Filter weather records">
+            <div class="filter-heading">
+              <span class="filter-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 5h16l-6.2 7.1v5.4l-3.6 1.9v-7.3L4 5Z"/></svg>
+              </span>
+              <div><strong>Explore conditions</strong><span>Refine the records below</span></div>
+            </div>
+            <label class="filter-control city-control">
+              <span>CITY</span>
+              <select id="city-filter" aria-label="Filter by city">
+                <option value="all">All cities</option>
+              </select>
+            </label>
+            <div class="date-filters">
+              <label class="filter-control">
+                <span>FROM</span>
+                <input id="start-date" type="date" aria-label="Start date">
+              </label>
+              <span class="date-arrow" aria-hidden="true">→</span>
+              <label class="filter-control">
+                <span>TO</span>
+                <input id="end-date" type="date" aria-label="End date">
+              </label>
+            </div>
+            <button id="reset-filters" class="reset-button" type="button">Reset <span aria-hidden="true">↺</span></button>
+          </section>
+
+          <section class="metric-grid" aria-label="Weather summary">
+            <article class="metric-card temperature-card">
+              <div class="metric-topline"><span>AVERAGE TEMPERATURE</span><span class="metric-icon temp-icon" aria-hidden="true">°</span></div>
+              <div class="metric-value"><span id="average-temperature">—</span><span class="metric-unit">°C</span></div>
+              <div class="metric-foot"><span class="metric-symbol">⌁</span><span id="temperature-note">Across filtered records</span></div>
+              <div class="metric-decoration temp-decoration" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </article>
+            <article class="metric-card rainfall-card">
+              <div class="metric-topline"><span>TOTAL PRECIPITATION</span><span class="metric-icon rain-icon" aria-hidden="true">⌁</span></div>
+              <div class="metric-value"><span id="total-precipitation">—</span><span class="metric-unit">mm</span></div>
+              <div class="metric-foot"><span class="rain-dash"></span><span>Rainfall in selected period</span></div>
+              <div class="rain-decoration" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </article>
+            <article class="metric-card cities-card">
+              <div class="metric-topline"><span>CITIES COVERED</span><span class="metric-icon city-icon" aria-hidden="true">⌖</span></div>
+              <div class="metric-value"><span id="city-count">—</span><span class="metric-unit">cities</span></div>
+              <div class="metric-foot"><span class="city-stack" aria-hidden="true"><i>T</i><i>D</i><i>I</i></span><span id="record-count">Weather observations</span></div>
+              <div class="city-decoration" aria-hidden="true"><span>✳</span></div>
+            </article>
+          </section>
+
+          <section class="insights-grid">
+            <article class="panel trend-panel">
+              <div class="panel-header">
+                <div><p class="section-kicker">THE BIG PICTURE</p><h2>Conditions over time</h2></div>
+                <div class="chart-legend"><span><i class="legend-temp"></i>Temperature <b>°C</b></span><span><i class="legend-rain"></i>Precipitation <b>mm</b></span></div>
+              </div>
+              <div id="chart-container" class="chart-container" role="img" aria-label="Temperature and precipitation over time"></div>
+              <div class="chart-footer"><span id="chart-caption">Showing filtered daily readings</span><span class="chart-key"><i></i> Daily reading</span></div>
+            </article>
+
+            <article class="panel highlight-panel">
+              <div class="highlight-top">
+                <span class="highlight-badge"><span aria-hidden="true">✦</span> CITY SPOTLIGHT</span>
+                <span class="highlight-sparkle" aria-hidden="true">✳</span>
+              </div>
+              <p class="spotlight-kicker">WARMEST READING</p>
+              <h2 id="warmest-city">—</h2>
+              <p class="spotlight-location" id="warmest-location">Waiting for weather data</p>
+              <div class="spotlight-temperature"><span id="warmest-temperature">—</span><span>°C</span><i aria-hidden="true">☀</i></div>
+              <div class="spotlight-divider"></div>
+              <div class="spotlight-meta"><span>RECORDED ON</span><strong id="warmest-date">—</strong></div>
+              <div class="spotlight-bottom"><span id="spotlight-note">Based on your current filters</span><span aria-hidden="true">↗</span></div>
+            </article>
+          </section>
+
+          <section id="weather-table" class="panel records-panel">
+            <div class="records-header">
+              <div><p class="section-kicker">THE DETAILS</p><h2>Daily observations <span id="visible-count" class="count-pill">0</span></h2></div>
+              <div class="records-meta"><span class="table-live-dot"></span> From the weather dataset <span class="records-separator">·</span> <span id="sort-label">Sorted by date</span></div>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th scope="col">CITY</th><th scope="col">DATE</th><th scope="col">TEMPERATURE</th><th scope="col">PRECIPITATION</th><th scope="col">CONDITIONS</th></tr>
+                </thead>
+                <tbody id="weather-rows"></tbody>
+              </table>
+            </div>
+            <div id="empty-state" class="empty-state" hidden>
+              <span aria-hidden="true">☁</span>
+              <strong>No weather readings found</strong>
+              <p>Try a different city or widen your date range.</p>
+              <button id="empty-reset" type="button">Clear all filters</button>
+            </div>
+            <div class="table-footer"><span id="table-summary">Loading observations…</span><span>Temperature in <strong>°C</strong> <i></i> Precipitation in <strong>mm</strong></span></div>
+          </section>
+
+          <footer class="page-footer"><span>Weather Atlas <span>·</span> Open data, made approachable.</span><a href="../../data/environment/weather.csv">View source data <span aria-hidden="true">↗</span></a></footer>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
