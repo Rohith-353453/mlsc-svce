@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f6f2">
+    <meta name="description" content="Explore recorded station-to-station routes and their endpoint data.">
+    <title>Rail Link | Route connections</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Rail Link home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M8 25V11a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v14M8 18h16M11 25l-3 3m13-3 3 3M11 12h.01M21 12h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>RAIL<span class="brand-light">LINK</span></span>
+      </a>
+      <span class="topbar-note"><span class="live-dot"></span> OPEN DATA EXPLORER</span>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span>TRANSPORTATION</span><span class="eyebrow-line"></span><span>ROUTE DIRECTORY</span></p>
+          <h1 id="page-title">Every route tells<br>a <span>story.</span></h1>
+          <p class="hero-description">Trace recorded connections between stations. Search the network, follow a route, and see exactly where the data leads.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit orbit-three"></div>
+          <div class="art-line"></div>
+          <span class="art-station station-a"></span>
+          <span class="art-station station-b"></span>
+          <span class="art-station station-c"></span>
+          <span class="art-node node-a">01</span>
+          <span class="art-node node-b">02</span>
+          <span class="art-node node-c">03</span>
+          <span class="art-caption">CONNECTED<br>BY DATA</span>
+        </div>
+      </section>
+
+      <section class="content" aria-label="Route explorer">
+        <div class="stats" aria-label="Network summary">
+          <article class="stat-card stat-primary">
+            <div class="stat-label">RECORDED ROUTES <span class="stat-icon" aria-hidden="true">↗</span></div>
+            <div class="stat-value" id="route-count">—</div>
+            <div class="stat-note">direct connections in the dataset</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-label">STATIONS IN NETWORK <span class="stat-icon station-icon" aria-hidden="true">⊙</span></div>
+            <div class="stat-value" id="station-count">—</div>
+            <div class="stat-note">unique station records</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-label">NEEDS ATTENTION <span class="stat-icon alert-icon" aria-hidden="true">!</span></div>
+            <div class="stat-value" id="missing-count">—</div>
+            <div class="stat-note">routes with unresolved endpoints</div>
+          </article>
+        </div>
+
+        <div class="directory-heading">
+          <div>
+            <p class="section-kicker">THE NETWORK</p>
+            <h2>Route connections</h2>
+          </div>
+          <div class="result-count" aria-live="polite"><span id="visible-count">—</span> <span>connections shown</span></div>
+        </div>
+
+        <form class="filters" id="filters">
+          <label class="search-field">
+            <span class="sr-only">Search routes and stations</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.5 4.5"></path></svg>
+            <input id="search" type="search" placeholder="Search route, station or ID..." autocomplete="off">
+            <kbd>/</kbd>
+          </label>
+          <label class="select-field">
+            <span class="sr-only">Filter by route type</span>
+            <select id="type-filter">
+              <option value="">All route types</option>
+            </select>
+            <span class="select-chevron" aria-hidden="true">⌄</span>
+          </label>
+          <label class="select-field">
+            <span class="sr-only">Filter by starting station</span>
+            <select id="start-filter">
+              <option value="">Any starting station</option>
+            </select>
+            <span class="select-chevron" aria-hidden="true">⌄</span>
+          </label>
+          <button class="reset-button" id="reset-filters" type="button">Reset <span aria-hidden="true">↺</span></button>
+        </form>
+
+        <p id="data-status" class="status-message" role="status">Loading route data...</p>
+        <div class="integrity-notice" id="integrity-notice" role="status" hidden>
+          <span class="notice-icon" aria-hidden="true">!</span>
+          <span><strong id="integrity-count">0</strong> route records have at least one endpoint that could not be matched. Source IDs are shown below.</span>
+        </div>
+        <div class="route-list" id="route-list" aria-live="polite"></div>
+        <div class="empty-state" id="empty-state" hidden>
+          <span class="empty-mark" aria-hidden="true">⌕</span>
+          <h3>No routes found</h3>
+          <p>Try changing your search or clearing the filters.</p>
+          <button class="text-button" id="empty-reset" type="button">Clear filters <span aria-hidden="true">→</span></button>
+        </div>
+
+        <footer class="data-footer">
+          <span><span class="footer-dot"></span> Source data is shown as recorded</span>
+          <span>ROUTES + RAILWAY STATIONS <span aria-hidden="true">·</span> CSV</span>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>
