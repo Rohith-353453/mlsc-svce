@@ -1,0 +1,514 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  color-scheme: light;
+  font-family: "DM Sans", sans-serif;
+  color: #17241e;
+  background: #f5f7f4;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #17241e;
+  --muted: #6d7972;
+  --line: #e1e7e1;
+  --green: #245c42;
+  --green-dark: #17452f;
+  --lime: #c8ed87;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.page-shell {
+  width: min(1080px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.topbar {
+  height: 78px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--green);
+  color: white;
+  font-family: Manrope, sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.brand-light {
+  color: #86918a;
+}
+
+.dataset-tag,
+.eyebrow,
+.field-label {
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.dataset-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #58655d;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #81b84c;
+  box-shadow: 0 0 0 3px #e5f1da;
+}
+
+.intro {
+  max-width: 680px;
+  padding: 73px 0 45px;
+}
+
+.eyebrow {
+  margin: 0 0 15px;
+  color: var(--green);
+  font-weight: 500;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 17px;
+  font-family: Manrope, sans-serif;
+  font-size: clamp(39px, 6vw, 62px);
+  font-weight: 600;
+  letter-spacing: -0.065em;
+  line-height: 1.08;
+}
+
+h1 span {
+  color: var(--green);
+}
+
+.intro-copy {
+  max-width: 565px;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.finder {
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) 190px 175px auto;
+  align-items: end;
+  gap: 15px;
+  padding: 21px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 7px 26px rgb(32 61 43 / 4%);
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 9px;
+  color: #77837b;
+}
+
+.input-wrap,
+.number-wrap {
+  display: flex;
+  height: 44px;
+  align-items: center;
+  border: 1px solid #dce3dd;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.input-wrap:focus-within,
+.number-wrap:focus-within,
+select:focus-visible {
+  border-color: #6b9d7c;
+  outline: 3px solid rgb(107 157 124 / 15%);
+}
+
+.input-wrap {
+  padding: 0 12px;
+  gap: 10px;
+}
+
+.search-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  border: 1.7px solid #819087;
+  border-radius: 50%;
+}
+
+.search-icon::after {
+  position: absolute;
+  right: -5px;
+  bottom: -3px;
+  width: 6px;
+  height: 1.7px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  background: #819087;
+  content: "";
+}
+
+.input-wrap input,
+.number-wrap input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.input-wrap input::placeholder,
+.number-wrap input::placeholder {
+  color: #9aa59d;
+}
+
+kbd {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #e2e8e3;
+  border-radius: 4px;
+  color: #89948d;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+}
+
+select {
+  width: 100%;
+  height: 44px;
+  padding: 0 31px 0 12px;
+  appearance: none;
+  border: 1px solid #dce3dd;
+  border-radius: 7px;
+  outline: none;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m2 4 4 4 4-4' fill='none' stroke='%2377837b' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.number-wrap {
+  padding: 0 10px 0 12px;
+  gap: 8px;
+}
+
+.number-wrap span {
+  color: #8b968f;
+  font-size: 12px;
+}
+
+.clear-button {
+  height: 44px;
+  padding: 0 8px;
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.clear-button:hover {
+  color: var(--green-dark);
+  text-decoration: underline;
+}
+
+.results {
+  padding: 54px 0 69px;
+}
+
+.results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 21px;
+}
+
+.results-heading .eyebrow {
+  margin-bottom: 8px;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-family: Manrope, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.result-count {
+  margin-left: 5px;
+  color: #88938c;
+  font-family: "DM Mono", monospace;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.results-note {
+  margin-bottom: 3px;
+  color: #829087;
+  font-size: 12px;
+}
+
+.status-message {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.status-message:empty {
+  display: none;
+}
+
+.status-message[data-error="true"] {
+  padding: 14px 16px;
+  border: 1px solid #f1cac5;
+  border-radius: 8px;
+  background: #fff8f7;
+  color: #943d32;
+}
+
+.hospital-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.hospital-card {
+  display: flex;
+  min-height: 177px;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 21px 22px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.hospital-card:hover {
+  transform: translateY(-2px);
+  border-color: #c7d8ca;
+  box-shadow: 0 8px 22px rgb(32 61 43 / 6%);
+}
+
+.hospital-card-main {
+  min-width: 0;
+}
+
+.hospital-id {
+  margin: 0 0 13px;
+  color: #859189;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.hospital-name {
+  margin: 0 0 7px;
+  font-family: Manrope, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+.hospital-city {
+  margin: 0;
+  color: #748078;
+  font-size: 12px;
+}
+
+.capacity {
+  display: flex;
+  min-width: 88px;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding-left: 12px;
+  border-left: 1px solid #e8ece8;
+}
+
+.capacity-number {
+  color: var(--green);
+  font-family: Manrope, sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+}
+
+.capacity-unit {
+  margin-top: 5px;
+  color: #869189;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 35px 20px;
+  border: 1px dashed #d6dfd7;
+  border-radius: 10px;
+  color: #6d7972;
+  text-align: center;
+  font-size: 13px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 21px 0 28px;
+  border-top: 1px solid var(--line);
+  color: #849087;
+  font-size: 11px;
+}
+
+.footer a {
+  color: var(--green);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 760px) {
+  .finder {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .search-field {
+    grid-column: 1 / -1;
+  }
+
+  .clear-button {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 560px) {
+  .page-shell {
+    width: min(100% - 32px, 440px);
+  }
+
+  .topbar {
+    height: 66px;
+  }
+
+  .brand {
+    font-size: 10px;
+  }
+
+  .dataset-tag {
+    font-size: 8px;
+  }
+
+  .intro {
+    padding: 55px 0 34px;
+  }
+
+  .finder {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .search-field {
+    grid-column: auto;
+  }
+
+  .results {
+    padding: 42px 0 52px;
+  }
+
+  .results-heading {
+    display: block;
+  }
+
+  .results-note {
+    margin: 9px 0 0;
+  }
+
+  .hospital-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hospital-card {
+    min-height: 155px;
+    padding: 18px;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
