@@ -1,0 +1,10 @@
+{
+  "name": "mlsc-svce-weather-explorer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A lightweight explorer for the Dev Days weather dataset.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
