@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7f4">
+    <title>Hospital Finder | Dev Days Open Data</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="../../README.md" aria-label="Dev Days Open Data home">
+          <span class="brand-mark" aria-hidden="true">D</span>
+          <span>DEV DAYS <span class="brand-light">/ OPEN DATA</span></span>
+        </a>
+        <span class="dataset-tag"><span class="status-dot" aria-hidden="true"></span> PUBLIC SERVICES</span>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">CARE, CLOSER TO HOME</p>
+        <h1 id="page-title">Find the right <span>hospital.</span></h1>
+        <p class="intro-copy">Explore hospital capacity across our cities. Search by hospital name or ID, then narrow the list by location and available beds.</p>
+      </section>
+
+      <section class="finder" aria-label="Search and filter hospitals">
+        <div class="search-field">
+          <label class="field-label" for="search">SEARCH HOSPITALS</label>
+          <div class="input-wrap">
+            <span class="search-icon" aria-hidden="true"></span>
+            <input id="search" type="search" placeholder="Try a hospital name or ID" autocomplete="off">
+            <kbd>/</kbd>
+          </div>
+        </div>
+        <div class="filter-field">
+          <label class="field-label" for="city-filter">CITY</label>
+          <select id="city-filter">
+            <option value="">All cities</option>
+          </select>
+        </div>
+        <div class="filter-field beds-field">
+          <label class="field-label" for="beds-filter">MINIMUM BEDS</label>
+          <div class="number-wrap">
+            <input id="beds-filter" type="number" min="0" step="1" inputmode="numeric" placeholder="Any">
+            <span aria-hidden="true">beds</span>
+          </div>
+        </div>
+        <button class="clear-button" id="clear-filters" type="button">Clear filters</button>
+      </section>
+
+      <section class="results" aria-labelledby="results-heading">
+        <div class="results-heading">
+          <div>
+            <p class="eyebrow">THE DIRECTORY</p>
+            <h2 id="results-heading">Hospitals <span id="result-count" class="result-count"></span></h2>
+          </div>
+          <p class="results-note">Capacity is measured in inpatient beds.</p>
+        </div>
+        <div id="results-status" class="status-message" role="status" aria-live="polite">Loading hospital data…</div>
+        <div id="hospital-list" class="hospital-grid" aria-live="polite"></div>
+      </section>
+
+      <footer class="footer">
+        <span>Open data for better-connected communities.</span>
+        <a href="../../data/public_services/hospitals.csv">View source data <span aria-hidden="true">↗</span></a>
+      </footer>
+    </main>
+  </body>
+</html>
