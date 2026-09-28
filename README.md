@@ -21,6 +21,10 @@ We provide data across 5 domains:
 4. Build a solution using any language, framework, or tools you prefer. We highly encourage using GitHub Copilot to help build your application!
 5. Follow our [Contributing Guide](CONTRIBUTING.md) to submit a Pull Request.
 
+## Explore an example
+
+Open the [Data Visualization Gallery](examples/README.md) for an interactive browser gallery built from the repository's CSV datasets. It includes setup instructions, identifies the source and purpose of each chart, and explains the limits of the available data.
+
 ## For Organizers
 To populate the GitHub issues automatically:
 1. Go to the "Actions" tab in this repository.
