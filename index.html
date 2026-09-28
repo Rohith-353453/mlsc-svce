@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f6f3">
+    <meta name="description" content="Review the Dev Days open-data CSVs for quality issues without changing source data.">
+    <title>Data quality review — Dev Days Open Data</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="Data quality review home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="brand-copy"><strong>fieldnotes</strong><small>OPEN DATA TOOLKIT</small></span>
+        </a>
+
+        <div class="workspace-label">WORKSPACE</div>
+        <button class="workspace-switcher" type="button" aria-label="Current workspace">
+          <span class="workspace-avatar">DD</span>
+          <span class="workspace-copy"><strong>Dev Days</strong><small>9 datasets · CSV</small></span>
+          <span class="chevron" aria-hidden="true">⌄</span>
+        </button>
+
+        <nav class="primary-nav" aria-label="Main navigation">
+          <button class="nav-item active" type="button" data-view="overview"><span class="nav-icon">◫</span>Overview</button>
+          <button class="nav-item" type="button" data-view="findings"><span class="nav-icon">◎</span>Findings<span id="finding-nav-count" class="nav-count">0</span></button>
+          <button class="nav-item" type="button" data-view="datasets"><span class="nav-icon">▤</span>Datasets<span class="nav-trailing">9</span></button>
+        </nav>
+
+        <div class="side-section-label">DOMAINS</div>
+        <nav class="domain-nav" aria-label="Filter by data domain">
+          <button class="domain-item selected" type="button" data-domain="all"><span class="domain-dot all-dot"></span>All data<span id="all-domain-count" class="domain-total">9</span></button>
+          <button class="domain-item" type="button" data-domain="Cities"><span class="domain-dot city-dot"></span>Cities<span class="domain-total">1</span></button>
+          <button class="domain-item" type="button" data-domain="Education"><span class="domain-dot education-dot"></span>Education<span class="domain-total">1</span></button>
+          <button class="domain-item" type="button" data-domain="Environment"><span class="domain-dot environment-dot"></span>Environment<span class="domain-total">2</span></button>
+          <button class="domain-item" type="button" data-domain="Transportation"><span class="domain-dot transport-dot"></span>Transportation<span class="domain-total">2</span></button>
+          <button class="domain-item" type="button" data-domain="Public services"><span class="domain-dot services-dot"></span>Public services<span class="domain-total">3</span></button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="privacy-note"><span class="lock-icon" aria-hidden="true">⌑</span><span><strong>Your data stays yours</strong><small>Checks run in your browser.<br>Original CSVs are never changed.</small></span></div>
+          <div class="profile-row"><span class="profile-avatar">DD</span><span><strong>Dev Days Open Data</strong><small>Local workspace</small></span><span class="more-icon" aria-hidden="true">···</span></div>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Dev Days Open Data</span><span class="crumb-slash">/</span><strong id="breadcrumb-current">Overview</strong></div>
+          <div class="top-actions">
+            <span class="run-state"><span id="status-dot" class="status-dot"></span><span id="run-status">Loading datasets…</span></span>
+            <button id="rerun-button" class="button button-quiet" type="button"><span class="refresh-icon">↻</span> Run checks</button>
+            <button id="export-button" class="button button-dark" type="button" disabled><span aria-hidden="true">↧</span> Export report</button>
+          </div>
+        </header>
+
+        <div class="content-wrap">
+          <section id="overview-view" class="view-section">
+            <div class="page-heading">
+              <div>
+                <div class="eyebrow"><span class="eyebrow-mark">✳</span> DATA HEALTH · SNAPSHOT</div>
+                <h1>A clearer picture<br>of your <span>data.</span></h1>
+                <p class="page-intro">A careful look at the details that make your datasets trustworthy.<br>Nothing is changed without your say.</p>
+              </div>
+              <div class="scan-stamp"><span class="scan-orbit">✳</span><span><small>LAST SCAN</small><strong id="scan-time">—</strong></span></div>
+            </div>
+
+            <div id="load-error" class="load-error" role="alert" hidden></div>
+
+            <div class="metrics-grid" aria-label="Review summary">
+              <article class="metric-card metric-primary">
+                <div class="metric-label">OVERALL HEALTH <span class="help-dot" title="Based on the proportion of checks passing.">i</span></div>
+                <div class="health-row"><strong id="health-score">—</strong><span id="health-label" class="health-badge">SCANNING</span></div>
+                <div class="health-track"><span id="health-bar"></span></div>
+                <div id="health-caption" class="metric-foot">Evaluating your data…</div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-label">DATASETS <span class="metric-glyph glyph-green">▤</span></div>
+                <div class="metric-number" id="dataset-count">—</div>
+                <div class="metric-foot"><span class="inline-good">●</span><span id="dataset-caption">waiting to load</span></div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-label">RECORDS REVIEWED <span class="metric-glyph glyph-lilac">⌗</span></div>
+                <div class="metric-number" id="record-count">—</div>
+                <div class="metric-foot">Across all available CSV files</div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-label">ISSUES TO REVIEW <span class="metric-glyph glyph-orange">◉</span></div>
+                <div class="metric-number" id="issue-count">—</div>
+                <div class="metric-foot"><span id="issue-caption">Potential data quality findings</span></div>
+              </article>
+            </div>
+
+            <div class="section-heading"><div><h2>Quality by domain</h2><p>Each dataset is checked against its actual columns and references.</p></div><button class="text-button" type="button" data-go="datasets">All datasets <span aria-hidden="true">→</span></button></div>
+            <div id="domain-cards" class="domain-grid"></div>
+
+            <div class="lower-grid">
+              <section class="panel checks-panel">
+                <div class="panel-heading"><div><h2>What we checked</h2><p>Rules grounded in the data dictionary</p></div><span id="checks-total" class="total-chip">— checks</span></div>
+                <div id="check-list" class="check-list"></div>
+              </section>
+              <section class="panel findings-panel">
+                <div class="panel-heading"><div><h2>Needs a closer look</h2><p>Evidence-led findings, never silent edits</p></div><button class="icon-button" type="button" data-go="findings" aria-label="View all findings">↗</button></div>
+                <div id="overview-findings" class="overview-findings"></div>
+              </section>
+            </div>
+
+            <section class="panel dataset-panel">
+              <div class="panel-heading"><div><h2>Your datasets</h2><p>Choose a dataset to inspect its records and check results.</p></div><button class="text-button" type="button" data-go="datasets">View all <span aria-hidden="true">→</span></button></div>
+              <div id="overview-datasets" class="dataset-list"></div>
+            </section>
+          </section>
+
+          <section id="datasets-view" class="view-section alternate-view" hidden>
+            <div class="alternate-heading"><div class="eyebrow">DATA CATALOG</div><h1>Your datasets</h1><p>Inspect source rows, columns, validation results, and references.</p></div>
+            <div class="dataset-layout">
+              <div class="dataset-browser panel">
+                <label class="search-box"><span aria-hidden="true">⌕</span><input id="dataset-search" type="search" placeholder="Search datasets…" aria-label="Search datasets"></label>
+                <div id="catalog-list" class="catalog-list"></div>
+              </div>
+              <article id="dataset-detail" class="dataset-detail panel"></article>
+            </div>
+          </section>
+
+          <section id="findings-view" class="view-section alternate-view" hidden>
+            <div class="alternate-heading"><div class="eyebrow">EVIDENCE, NOT GUESSES</div><h1>Review findings</h1><p>Every finding includes the row, column, observed value, and a safe next step.</p></div>
+            <div class="findings-toolbar"><div id="findings-summary">Loading findings…</div><label class="filter-select">Severity <select id="severity-filter"><option value="all">All levels</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></label></div>
+            <div id="findings-list" class="findings-list"></div>
+          </section>
+
+          <footer class="page-footer"><span>FIELDNOTES <span class="footer-dot">·</span> DEV DAYS OPEN DATA</span><span>Checks run locally in your browser <span class="footer-dot">·</span> Source data stays untouched</span></footer>
+        </div>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
