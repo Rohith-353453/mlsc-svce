@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102321">
+    <title>Weather Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="Weather Explorer home">
+          <span class="wordmark-icon" aria-hidden="true">W</span>
+          <span>FIELDNOTES <span class="wordmark-divider">/</span> WEATHER</span>
+        </a>
+        <span class="live-label"><span class="live-dot"></span> OPEN DATA EXPLORER</span>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">ENVIRONMENTAL OBSERVATIONS <span>·</span> DEV DAYS DATASET</p>
+        <h1 id="page-title">Weather,<br><span>in perspective.</span></h1>
+        <p class="intro-copy">A closer look at daily temperatures and precipitation across our cities. Choose a place, set a date, and see what the sky was doing.</p>
+      </section>
+
+      <section class="explorer" aria-label="Weather data explorer">
+        <div class="filter-panel">
+          <div class="filter-heading">
+            <div>
+              <p class="eyebrow">MAKE IT YOURS</p>
+              <h2>Explore the data</h2>
+            </div>
+            <button class="reset-button" id="reset-filters" type="button">Reset filters <span aria-hidden="true">↺</span></button>
+          </div>
+          <div class="filter-controls">
+            <label class="field">
+              <span class="field-label">CITY</span>
+              <span class="select-wrap">
+                <select id="city-filter" aria-label="Filter by city">
+                  <option value="">All cities</option>
+                </select>
+                <span class="select-chevron" aria-hidden="true">⌄</span>
+              </span>
+            </label>
+            <label class="field">
+              <span class="field-label">FROM DATE</span>
+              <input id="date-from" type="date" aria-label="Filter from date">
+            </label>
+            <label class="field">
+              <span class="field-label">TO DATE</span>
+              <input id="date-to" type="date" aria-label="Filter to date">
+            </label>
+          </div>
+          <p id="filter-error" class="filter-error" role="alert" hidden></p>
+        </div>
+
+        <div class="results-heading">
+          <div>
+            <p class="eyebrow">AT A GLANCE</p>
+            <h2>Conditions summary</h2>
+          </div>
+          <span id="result-count" class="result-count" aria-live="polite">Loading observations…</span>
+        </div>
+
+        <div class="summary-grid" aria-live="polite">
+          <article class="summary-card temperature-card">
+            <div class="card-topline"><span class="card-icon" aria-hidden="true">°</span><span class="card-kicker">AVERAGE TEMPERATURE</span></div>
+            <p class="summary-value" id="average-temperature">—</p>
+            <p class="summary-caption">degrees Celsius <span aria-hidden="true">·</span> mean of filtered days</p>
+            <span class="card-decoration temperature-decoration" aria-hidden="true">°</span>
+          </article>
+          <article class="summary-card rain-card">
+            <div class="card-topline"><span class="card-icon rain-icon" aria-hidden="true">↘</span><span class="card-kicker">TOTAL PRECIPITATION</span></div>
+            <p class="summary-value" id="total-precipitation">—</p>
+            <p class="summary-caption">millimeters <span aria-hidden="true">·</span> sum of filtered days</p>
+            <span class="card-decoration rain-decoration" aria-hidden="true">〰</span>
+          </article>
+        </div>
+
+        <section class="observations" aria-labelledby="observations-title">
+          <div class="table-heading">
+            <div>
+              <p class="eyebrow">DAY BY DAY</p>
+              <h2 id="observations-title">Weather observations</h2>
+            </div>
+            <span class="unit-note">Temperature (°C) <span>·</span> Precipitation (mm)</span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">DATE</th>
+                  <th scope="col">CITY</th>
+                  <th scope="col">TEMPERATURE <span>(°C)</span></th>
+                  <th scope="col">PRECIPITATION <span>(mm)</span></th>
+                  <th scope="col">CONDITIONS</th>
+                </tr>
+              </thead>
+              <tbody id="observations-body">
+                <tr><td class="status-cell" colspan="5">Loading weather data…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="data-note">Source: <code>data/environment/weather.csv</code>. City names are matched to <code>data/cities/cities.csv</code> by <code>city_id</code>.</p>
+        </section>
+      </section>
+
+      <footer class="page-footer">
+        <span>MADE FOR CURIOUS MINDS</span>
+        <span>FIELDNOTES <span class="wordmark-divider">/</span> WEATHER</span>
+      </footer>
+    </main>
+  </body>
+</html>
