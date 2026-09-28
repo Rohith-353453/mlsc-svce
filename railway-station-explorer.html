@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Station Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .controls {
+            background: white;
+            padding: 30px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 0.95em;
+            transition: border-color 0.3s;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .reset-btn {
+            align-self: flex-end;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            background: #e8e8e8;
+            border-color: #bbb;
+        }
+
+        .results-section {
+            background: white;
+            padding: 30px 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-header h2 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .result-count {
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .no-results svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .stations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .station-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .station-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-left-color: #764ba2;
+        }
+
+        .station-name {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        .station-details {
+            display: grid;
+            gap: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 500;
+            font-size: 1em;
+        }
+
+        .city-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .lines-badge {
+            display: inline-block;
+            background: #48bb78;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .stations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '.';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚂 Railway Station Explorer</h1>
+            <p>Search and filter railway stations by name, city, and service capacity</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="searchInput">Search Station Name</label>
+                <input type="text" id="searchInput" placeholder="e.g., Central, North, Grand..." autocomplete="off">
+            </div>
+
+            <div class="control-group">
+                <label for="cityFilter">Filter by City</label>
+                <select id="cityFilter">
+                    <option value="">All Cities</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="lineFilter">Filter by Line Count</label>
+                <select id="lineFilter">
+                    <option value="">All Line Counts</option>
+                </select>
+            </div>
+
+            <button class="reset-btn" id="resetBtn">Reset Filters</button>
+        </div>
+
+        <div class="results-section">
+            <div class="results-header">
+                <h2>Stations</h2>
+                <span class="result-count">
+                    <span id="resultCount">0</span> results
+                </span>
+            </div>
+
+            <div id="resultsContainer" class="stations-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let allStations = [];
+        let allCities = {};
+        let filteredStations = [];
+
+        // Initialize application
+        async function init() {
+            try {
+                console.log('Loading CSV files...');
+                const [stationsData, citiesData] = await Promise.all([
+                    loadCSV('data/transportation/railway_stations.csv'),
+                    loadCSV('data/cities/cities.csv')
+                ]);
+
+                // Parse cities into a map
+                const citiesArray = parseCSV(citiesData);
+                citiesArray.forEach(city => {
+                    allCities[city.city_id] = city.name;
+                });
+
+                // Parse stations
+                allStations = parseCSV(stationsData).map(station => ({
+                    ...station,
+                    lines: parseInt(station.lines, 10),
+                    cityName: allCities[station.city_id] || 'Unknown'
+                }));
+
+                console.log(`Loaded ${allStations.length} stations and ${Object.keys(allCities).length} cities`);
+
+                // Populate filters
+                populateFilters();
+
+                // Initial render
+                filteredStations = [...allStations];
+                renderResults();
+
+                // Setup event listeners
+                setupEventListeners();
+            } catch (error) {
+                console.error('Error initializing app:', error);
+                showError('Failed to load data. Please check the console.');
+            }
+        }
+
+        // Load CSV file
+        async function loadCSV(path) {
+            try {
+                const response = await fetch(path);
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${path}: ${response.statusText}`);
+                }
+                return await response.text();
+            } catch (error) {
+                console.error(`Error loading ${path}:`, error);
+                throw error;
+            }
+        }
+
+        // Parse CSV data
+        function parseCSV(data) {
+            const lines = data.trim().split('\n');
+            if (lines.length < 2) return [];
+
+            const headers = lines[0].split(',').map(h => h.trim());
+            const records = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.trim());
+                if (values.length === headers.length && values.some(v => v)) {
+                    const record = {};
+                    headers.forEach((header, index) => {
+                        record[header] = values[index];
+                    });
+                    records.push(record);
+                }
+            }
+
+            return records;
+        }
+
+        // Populate filter options
+        function populateFilters() {
+            // City filter
+            const cities = Object.entries(allCities)
+                .map(([id, name]) => ({ id, name }))
+                .sort((a, b) => a.name.localeCompare(b.name));
+
+            const citySelect = document.getElementById('cityFilter');
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.id;
+                option.textContent = city.name;
+                citySelect.appendChild(option);
+            });
+
+            // Line count filter
+            const lineCounts = [...new Set(allStations.map(s => s.lines))].sort((a, b) => a - b);
+            const lineSelect = document.getElementById('lineFilter');
+            lineCounts.forEach(count => {
+                const option = document.createElement('option');
+                option.value = count;
+                option.textContent = `${count} line${count !== 1 ? 's' : ''}`;
+                lineSelect.appendChild(option);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', applyFilters);
+            document.getElementById('cityFilter').addEventListener('change', applyFilters);
+            document.getElementById('lineFilter').addEventListener('change', applyFilters);
+            document.getElementById('resetBtn').addEventListener('click', resetFilters);
+        }
+
+        // Apply all filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cityId = document.getElementById('cityFilter').value;
+            const lineCount = document.getElementById('lineFilter').value;
+
+            filteredStations = allStations.filter(station => {
+                const matchesSearch = !searchTerm || station.name.toLowerCase().includes(searchTerm);
+                const matchesCity = !cityId || station.city_id === cityId;
+                const matchesLines = !lineCount || station.lines.toString() === lineCount;
+
+                return matchesSearch && matchesCity && matchesLines;
+            });
+
+            renderResults();
+        }
+
+        // Render results
+        function renderResults() {
+            const container = document.getElementById('resultsContainer');
+            const countElement = document.getElementById('resultCount');
+
+            countElement.textContent = filteredStations.length;
+
+            if (filteredStations.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results" style="grid-column: 1 / -1;">
+                        <div style="font-size: 3em; margin-bottom: 10px;">🔍</div>
+                        <h3>No stations found</h3>
+                        <p>Try adjusting your search filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredStations.map(station => `
+                <div class="station-card">
+                    <div class="station-name">${escapeHtml(station.name)}</div>
+                    <div class="station-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Station ID</span>
+                            <span class="detail-value">${escapeHtml(station.station_id)}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">City</span>
+                            <span class="detail-value">
+                                <span class="city-badge">${escapeHtml(station.cityName)}</span>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Lines Served</span>
+                            <span class="detail-value">
+                                <span class="lines-badge">${station.lines}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Reset filters
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('cityFilter').value = '';
+            document.getElementById('lineFilter').value = '';
+            applyFilters();
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Show error message
+        function showError(message) {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = `<div class="no-results" style="grid-column: 1 / -1;"><div style="color: #d32f2f;">${escapeHtml(message)}</div></div>`;
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
