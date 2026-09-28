@@ -21,6 +21,14 @@ We provide data across 5 domains:
 4. Build a solution using any language, framework, or tools you prefer. We highly encourage using GitHub Copilot to help build your application!
 5. Follow our [Contributing Guide](CONTRIBUTING.md) to submit a Pull Request.
 
+## Weather Explorer
+
+This repository includes a dependency-free weather explorer in `index.html`. Run
+`python3 -m http.server` from the repository root, then open
+`http://localhost:8000` to browse temperature (`°C`) and precipitation (`mm`)
+by city and date. The explorer joins weather records to
+`data/cities/cities.csv` using `city_id`.
+
 ## For Organizers
 To populate the GitHub issues automatically:
 1. Go to the "Actions" tab in this repository.
