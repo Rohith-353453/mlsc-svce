@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Browse daily temperature and precipitation readings by city.">
+    <title>Weather Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">ENVIRONMENT / DAILY READINGS</p>
+        <h1>Weather Explorer</h1>
+        <p class="intro">Compare temperature and rainfall across the cities in the open-data collection.</p>
+      </header>
+
+      <section class="filters" aria-labelledby="filter-heading">
+        <div class="section-heading">
+          <h2 id="filter-heading">Find a reading</h2>
+          <button id="reset-button" class="reset-button" type="button">Reset filters</button>
+        </div>
+        <div class="filter-grid">
+          <label>
+            City
+            <select id="city-filter">
+              <option value="">All cities</option>
+            </select>
+          </label>
+          <label>
+            Date
+            <input id="date-filter" type="date">
+          </label>
+        </div>
+      </section>
+
+      <section class="summary" aria-live="polite">
+        <div><span class="summary-value" id="reading-count">—</span><span class="summary-label">readings shown</span></div>
+        <div><span class="summary-value" id="average-temperature">—</span><span class="summary-label">average temperature</span></div>
+        <div><span class="summary-value" id="total-precipitation">—</span><span class="summary-label">rainfall in view</span></div>
+      </section>
+
+      <section aria-labelledby="readings-heading">
+        <div class="section-heading">
+          <h2 id="readings-heading">Daily readings</h2>
+          <p class="updated" id="status">Loading weather data…</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Weather readings filtered by city and date</caption>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">City</th>
+                <th scope="col">Temperature</th>
+                <th scope="col">Precipitation</th>
+              </tr>
+            </thead>
+            <tbody id="readings-body"></tbody>
+          </table>
+          <p class="empty-state" id="empty-state" hidden>No readings match these filters.</p>
+        </div>
+      </section>
+      <footer>Source: <code>data/environment/weather.csv</code> joined to <code>data/cities/cities.csv</code> by <code>city_id</code>.</footer>
+    </main>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
